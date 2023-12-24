@@ -17,4 +17,11 @@ https://datasheets.raspberrypi.com/rp2040/Minimal-KiCAD.zip
 ## 調査2 読解
 
 とりあえず読む。
+わからない単語を調べたらメモる。
+
+### 1章
+
+P4
+
+
 
