@@ -79,7 +79,7 @@ chatgptによる用語の説明。
 * 水晶発振器
 * IO
 
-## 電源
+### 電源
 * 1.1V(コア用) 
 	* RP2040の内臓レギュレータによって3.3Vから変換されるので無視してよい。
 * 3.3V(IO用)
@@ -127,12 +127,82 @@ chatgptによる用語の説明。
 
 
 
-## フラッシュストレージ
-## 水晶発振器
-## IO
+### フラッシュストレージ
+### 水晶発振器
+### IO
 
 
 
 
+## 設計
 
+### 仕様
+
+* 細長いraspberry pi pico
+	* 厚さ
+		* 部品は片面実装
+		* できるだけ薄く。
+	* 幅 USB-Cソケット+Δ
+		* ~15mmくらい
+	* 長さ
+		* 長くてよい。
+		* 圧し折ってIOピンの数を減らせるようにする。
+
+### メモ
+
+* ADC_AVDD
+	* 
+> When using an ADC input shared with a GPIO pin, the pin’s digital functions must be disabled by setting IE low and OD high in the pin’s pad control register. See Section 2.19.6.3, “Pad Control - User Bank” for details. The maximum ADC input voltage is determined by the digital IO supply voltage (IOVDD), not the ADC supply voltage (ADC_AVDD). For example, if IOVDD is powered at 1.8V, the voltage on the ADC inputs should not exceed 1.8V even if ADC_AVDD is powered at 3.3V. Voltages greater than IOVDD will result in leakage currents through the ESD protection diodes. See Section 5.5.3, “Pin Specifications” for details.
+> GPIO ピンと共有される ADC 入力を使用する場合、ピンのパッド制御レジスタで IE を Low に、OD を High に設定して、ピンのデジタル機能を無効にする必要があります。 詳細については、セクション2.19.6.3「パッドコントロール - ユーザーバンク」を参照してください。 最大 ADC 入力電圧は、ADC 電源電圧 (ADC_AVDD) ではなく、デジタル IO 電源電圧 (IOVDD) によって決まります。 たとえば、IOVDD が 1.8V で電源供給されている場合、ADC_AVDD が 3.3V で電源供給されていても、ADC 入力の電圧は 1.8V を超えてはなりません。 電圧が IOVDD を超えると、ESD 保護ダイオードを介して漏れ電流が発生します。 詳細については、「5.5.3 ピンの仕様」を参照してください。
+
+* pin
+![](./img/ds_13_pin.png)
+
+
+
+* GPIOx
+	* General-purpose digital input and output. RP2040 can connect one of a number of internal peripherals to each GPIO, or control GPIOs directly from software.
+	* 汎用デジタル入出力。RP2040は、内部の様々なペリフェラルを各GPIOに接続することができるほか、ソフトウェアから直接GPIOを制御することもできます。
+* GPIOx/ADCy
+	* General-purpose digital input and output, with analogue-to-digital converter function. The RP2040 ADC has an analogue multiplexer which can select any one of these pins, and sample the voltage.
+	* アナログ-デジタル変換機能を持つ汎用デジタル入出力。RP2040のADCにはアナログマルチプレクサがあり、これらのピンのいずれかを選択し、電圧をサンプリングすることができます。
+* QSPIx
+	* Interface to a SPI, Dual-SPI or Quad-SPI flash device, with execute-in-place support. These pins can also be used as software-controlled GPIOs, if they are not required for flash access.
+	* SPI、デュアルSPI、クアッドSPIフラッシュデバイスへのインターフェースで、実行中の場所のサポートがあります。これらのピンは、フラッシュアクセスに必要でない場合、ソフトウェア制御のGPIOとしても使用できます。
+* USB_DM and USB_DP
+	* USB controller, supporting Full Speed device and Full/Low Speed host. A 27Ω series termination resistor is required on each pin, but bus pullups and pulldowns are provided internally.
+	* USBコントローラーで、フルスピードデバイスおよびフル/ロースピードホストをサポートします。各ピンには27Ωの直列終端抵抗が必要ですが、バスのプルアップとプルダウンは内部で提供されます。
+* XIN and XOUT
+	* Connect a crystal to RP2040’s crystal oscillator. XIN can also be used as a single-ended CMOS clock input, with XOUT disconnected. The USB bootloader requires a 12MHz crystal or 12MHz clock input.
+	* RP2040のクリスタルオシレータにクリスタルを接続します。XINは、XOUTが切断された状態で、単端CMOSクロック入力としても使用できます。USBブートローダーには12MHzのクリスタルまたは12MHzのクロック入力が必要です。
+* RUN
+	* Global asynchronous reset pin. Reset when driven low, run when driven high. If no external reset is required, this pin can be tied directly to IOVDD.
+	* グローバル非同期リセットピン。低い状態でリセット、高い状態で動作します。外部リセットが不要な場合、このピンはIOVDDに直接接続されます。
+* SWCLK and SWDIO
+	* Access to the internal Serial Wire Debug multi-drop bus. Provides debug access to both processors, and can be used to download code.
+	* 内部シリアルワイヤデバッグマルチドロップバスへのアクセス。両方のプロセッサへのデバッグアクセスを提供し、コードのダウンロードにも使用できます。
+* TESTEN
+	* Factory test mode pin. Tie to GND.
+	* 工場テストモードピン。GNDに接続します。
+* GND
+	* Single external ground connection, bonded to a number of internal ground pads on the RP2040 die.
+	* 単一の外部グラウンド接続で、RP2040ダイ上の複数の内部グラウンドパッドに接続されています。
+* IOVDD
+	* Power supply for digital GPIOs, nominal voltage 1.8V to 3.3V
+	* デジタルGPIOの電源供給で、公称電圧は1.8Vから3.3Vです。
+* USB_VDD
+	* Power supply for internal USB Full Speed PHY, nominal voltage 3.3V
+	* 内部USBフルスピードPHYの電源供給で、公称電圧は3.3Vです。
+* ADC_AVDD
+	* Power supply for analogue-to-digital converter, nominal voltage 3.3V
+	* アナログ-デジタル変換器の電源供給で、公称電圧は3.3Vです。
+* VREG_VIN
+	* Power input for the internal core voltage regulator, nominal voltage 1.8V to 3.3V
+	* 内部コア電圧レギュレータの電源入力で、公称電圧は1.8Vから3.3Vです。
+* VREG_VOUT
+	* Power output for the internal core voltage regulator, nominal voltage 1.1V, 100mA max current
+	* 内部コア電圧レギュレータの電源出力で、公称電圧は1.1V、最大電流は100mAです。
+* DVDD
+	* Digital core power supply, nominal voltage 1.1V. Can be connected to VREG_VOUT, or to some other board-level power supply.
+	* デジタルコアの電源供給で、公称電圧は1.1Vです。VREG_VOUTに接続することも、他のボードレベルの電源供給に接続することもできます。
 
