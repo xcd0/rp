@@ -152,8 +152,7 @@ chatgptによる用語の説明。
 
 * ADC_AVDD
 	* > When using an ADC input shared with a GPIO pin, the pin’s digital functions must be disabled by setting IE low and OD high in the pin’s pad control register. See Section 2.19.6.3, “Pad Control - User Bank” for details. The maximum ADC input voltage is determined by the digital IO supply voltage (IOVDD), not the ADC supply voltage (ADC_AVDD). For example, if IOVDD is powered at 1.8V, the voltage on the ADC inputs should not exceed 1.8V even if ADC_AVDD is powered at 3.3V. Voltages greater than IOVDD will result in leakage currents through the ESD protection diodes. See Section 5.5.3, “Pin Specifications” for details.
-	>
-	> GPIO ピンと共有される ADC 入力を使用する場合、ピンのパッド制御レジスタで IE を Low に、OD を High に設定して、ピンのデジタル機能を無効にする必要があります。 詳細については、セクション2.19.6.3「パッドコントロール - ユーザーバンク」を参照してください。 最大 ADC 入力電圧は、ADC 電源電圧 (ADC_AVDD) ではなく、デジタル IO 電源電圧 (IOVDD) によって決まります。 たとえば、IOVDD が 1.8V で電源供給されている場合、ADC_AVDD が 3.3V で電源供給されていても、ADC 入力の電圧は 1.8V を超えてはなりません。 電圧が IOVDD を超えると、ESD 保護ダイオードを介して漏れ電流が発生します。 詳細については、「5.5.3 ピンの仕様」を参照してください。
+	* GPIO ピンと共有される ADC 入力を使用する場合、ピンのパッド制御レジスタで IE を Low に、OD を High に設定して、ピンのデジタル機能を無効にする必要があります。 詳細については、セクション2.19.6.3「パッドコントロール - ユーザーバンク」を参照してください。 最大 ADC 入力電圧は、ADC 電源電圧 (ADC_AVDD) ではなく、デジタル IO 電源電圧 (IOVDD) によって決まります。 たとえば、IOVDD が 1.8V で電源供給されている場合、ADC_AVDD が 3.3V で電源供給されていても、ADC 入力の電圧は 1.8V を超えてはなりません。 電圧が IOVDD を超えると、ESD 保護ダイオードを介して漏れ電流が発生します。 詳細については、「5.5.3 ピンの仕様」を参照してください。
 
 * pin
 ![](./img/ds_13_pin.png)
