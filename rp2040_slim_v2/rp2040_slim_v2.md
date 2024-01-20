@@ -5,6 +5,6 @@
 
 
 ![](pcb.png)
-![](3d.png)
+![](3dview.png)
 
 
