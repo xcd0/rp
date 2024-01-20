@@ -4,7 +4,7 @@
 * 試作1を改善する。
 
 
-![](slim-brd.svg)
+![](pcb.png)
 ![](3d.png)
 
 
